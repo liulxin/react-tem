@@ -2,7 +2,7 @@ import { ACTION_SET_ASIDE_PATH } from "./actions";
 import updateObject from "../../util/update_object";
 
 const initialState = {
-  asidePath: '/',
+  asidePath: '/index',
 };
 
 export default (state = initialState, action) => {

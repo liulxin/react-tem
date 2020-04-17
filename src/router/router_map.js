@@ -4,7 +4,8 @@ const Home = lazy(() => import("../pages/home"));
 const Login = lazy(() => import("../pages/login"));
 
 export default [
-  { path: "/", name: "Home", exact: true, component: Home },
+  { path: "/", name: "Home", exact: true, redirect: "/index", component: Home },
+  { path: "/index", name: "Home", component: Home },
   { path: "/login", name: "Login", component: Login },
   // 异常分析
   {

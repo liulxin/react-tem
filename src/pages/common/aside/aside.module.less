@@ -40,8 +40,8 @@
 }
 
 .mixin_brick() {
-  padding-top: 12px;
-  height: 63px;
+  padding-top: 14px;
+  height: 64px;
   .brick_text {
     opacity: 1;
   }
@@ -75,9 +75,9 @@
   -webkit-transition: padding-top, height 200ms, 200ms;
   -o-transition: padding-top, height 200ms, 200ms;
   transition: padding-top, height 200ms, 200ms;
-  &.active {
-    .mixin_brick;
-  }
+}
+.brick_wrap_active {
+  .mixin_brick;
 }
 
 .brick_icon {

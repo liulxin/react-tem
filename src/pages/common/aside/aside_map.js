@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/",
+    path: "/index",
     name: "总览",
     type: "icon-tuanduizonglan",
   },

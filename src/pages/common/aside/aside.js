@@ -1,7 +1,7 @@
-import React, { useMemo, memo, useState } from "react";
+import React, { useMemo, memo, useState, useEffect } from "react";
 import { createFromIconfontCN } from "@ant-design/icons";
 import classnames from "classnames";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAsidePath } from "../actions";
 import { bindActionCreators } from "redux";
@@ -29,8 +29,29 @@ const NextComItem = memo(({ to, name, setAsidePath, path }) => {
   );
 });
 
+const NextCom = ({ path, next }) =>
+  next ? (
+    <div
+      className={styles.menu_lev2}
+      style={{ height: next.length * 41 + 5 + "px" }}
+    >
+      <ul className={styles.next}>
+        {next.map((item_, i) => (
+          <NextComItem
+            key={i}
+            to={path + item_.path}
+            name={item_.name}
+            path={path}
+            setAsidePath={setAsidePath}
+          />
+        ))}
+      </ul>
+    </div>
+  ) : null;
+
 // root
-const RootTreeItem = memo(({ item, setAsidePath, asidePath }) => {
+
+const RootTreeItem = ({ item, setAsidePath, asidePath }) => {
   return (
     <div className={styles.brick}>
       {item.to ? (
@@ -48,42 +69,51 @@ const RootTreeItem = memo(({ item, setAsidePath, asidePath }) => {
           <NavLink
             to={item.path}
             className={classnames(styles.brick_wrap, {
-              [styles.active]: asidePath === item.path,
+              [styles.brick_wrap_active]: asidePath === item.path,
             })}
+            activeClassName={styles.brick_wrap_active}
             onClick={() => setAsidePath(item.path)}
           >
             <Icons className={styles.brick_icon} type={item.type} />
             <div className={styles.brick_text}>{item.name}</div>
           </NavLink>
-          {item.next ? (
-            <div
-              className={styles.menu_lev2}
-              style={{ height: item.next.length * 41 + 5 + "px" }}
-            >
-              <ul className={styles.next}>
-                {item.next.map((item_, i) => (
-                  <NextComItem
-                    key={i}
-                    to={item.path + item_.path}
-                    name={item_.name}
-                    path={item.path}
-                    setAsidePath={setAsidePath}
-                  />
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <NextCom next={item.next} path={item.path} />
         </div>
       )}
     </div>
   );
-});
-
-const RootTree = (props) => {
-  return asideMap.map((item, i) => (
-    <RootTreeItem key={i} item={item} {...props} />
-  ));
 };
+
+const mapStateToProps = function (state) {
+  return state;
+};
+const RootTree = connect(mapStateToProps)(
+  withRouter((props) => {
+    const { commonReducer: asidePath, dispatch } = props;
+
+    const { pathname } = useLocation();
+    const rootPath = useMemo(() => `/${pathname.split("/")[1]}`, [pathname]);
+
+    // 初始化页面 改变asidePath
+    useEffect(() => {
+      dispatch(setAsidePath(rootPath));
+    }, [dispatch, rootPath]);
+
+    const setAsidePathCbs = useMemo(
+      () => bindActionCreators({ setAsidePath }, dispatch),
+      [dispatch]
+    );
+
+    return asideMap.map((item, i) => (
+      <RootTreeItem
+        key={i}
+        item={item}
+        {...setAsidePathCbs}
+        asidePath={asidePath}
+      />
+    ));
+  })
+);
 
 const TreeBottom = (props) => {
   const [show, setShow] = useState(false);
@@ -116,17 +146,8 @@ const TreeBottom = (props) => {
   );
 };
 
+// withRouter
 const Aside = (props) => {
-  const {
-    dispatch,
-    commonReducer: { asidePath },
-  } = props;
-
-  const setAsidePathCbs = useMemo(
-    () => bindActionCreators({ setAsidePath }, dispatch),
-    [dispatch]
-  );
-
   return (
     <div className={styles.left_tree}>
       <div className={styles.tree_wrap}>
@@ -134,15 +155,11 @@ const Aside = (props) => {
           <Logo className={styles.logo} />
         </div>
         {/* 菜单 */}
-        {<RootTree {...setAsidePathCbs} asidePath={asidePath} />}
+        <RootTree />
         <TreeBottom />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = function (state) {
-  return state;
-};
-
-export default connect(mapStateToProps)(Aside);
+export default Aside;
