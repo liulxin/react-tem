@@ -1,15 +1,15 @@
-import React, { useMemo, memo } from "react";
+import React, { useMemo, memo, useState } from "react";
 import { createFromIconfontCN } from "@ant-design/icons";
 import classnames from "classnames";
 import { NavLink } from "react-router-dom";
-import styles from "./aside.module.less";
-import asideMap from "./aside_map";
 import { connect } from "react-redux";
-
-import { ReactComponent as Logo } from "~/assets/logo.svg";
-
 import { setAsidePath } from "../actions";
 import { bindActionCreators } from "redux";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { ReactComponent as Logo } from "~/assets/logo.svg";
+import { Avatar } from "antd";
+import styles from "./aside.module.less";
+import asideMap from "./aside_map";
 // iconfont
 const Icons = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_1759395_tcrvu21jqq.js",
@@ -85,6 +85,37 @@ const RootTree = (props) => {
   ));
 };
 
+const TreeBottom = (props) => {
+  const [show, setShow] = useState(false);
+  return (
+    <div className={styles.tree_bottom}>
+      <div className={styles.avatar} onClick={() => setShow(!show)}>
+        <Avatar
+          style={{ backgroundColor: "#87d068" }}
+          icon={<UserOutlined />}
+        />
+      </div>
+      <div
+        className={classnames(styles.personal_setting_menu, {
+          [styles.show]: show,
+        })}
+      >
+        <div className={styles.menu_triangle} />
+        <ul className={styles.menu_items}>
+          <li className={styles.group}>
+            <a href="/">
+              <i>
+                <LogoutOutlined />
+              </i>
+              退出登录
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 const Aside = (props) => {
   const {
     dispatch,
@@ -102,7 +133,9 @@ const Aside = (props) => {
         <div className={styles.brick}>
           <Logo className={styles.logo} />
         </div>
+        {/* 菜单 */}
         {<RootTree {...setAsidePathCbs} asidePath={asidePath} />}
+        <TreeBottom />
       </div>
     </div>
   );

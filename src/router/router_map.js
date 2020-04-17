@@ -108,4 +108,78 @@ export default [
     exact: true,
     component: Login,
   },
+  {
+    path: "/operation/onlineCount",
+    name: "OperationOnlineCount",
+    component: Login,
+  },
+  {
+    path: "/operation/retentionData",
+    name: "OperationRetentionData",
+    component: Login,
+  },
+  {
+    path: "/operation/deviceAnalysis",
+    name: "OperationDeviceAnalysis",
+    component: Login,
+  },
+  {
+    path: "/operation/firstInstallPerDay",
+    name: "OperationFirstInstallPerDay",
+    component: Login,
+  },
+  // 统计
+  {
+    path: "/statistics",
+    name: "StatisticsUserCharacteristics",
+    redirect: "/statistics/userCharacteristics",
+    exact: true,
+    component: Login,
+  },
+  {
+    path: "/statistics/userCharacteristics",
+    name: "StatisticsUserCharacteristics",
+    component: Login,
+  },
+  {
+    path: "/statistics/deviceProperties",
+    name: "StatisticsDeviceProperties",
+    component: Login,
+  },
+  {
+    path: "/statistics/networkType",
+    name: "StatisticsNetworkType",
+    component: Login,
+  },
+  // 行为分析
+  {
+    path: "/behavior",
+    name: "BehaviorSearch",
+    redirect: "/behavior/search",
+    exact: true,
+    component: Login,
+  },
+  {
+    path: "/behavior/search",
+    name: "BehaviorSearch",
+    component: Login,
+  },
+  {
+    path: "/behavior/detail/:id",
+    name: "BehaviorDetail",
+    component: Login,
+  },
+  // 性能数据
+  {
+    path: "/performance",
+    name: "PerformanceData",
+    redirect: "/performance/data",
+    exact: true,
+    component: Login,
+  },
+  {
+    path: "/performance/data",
+    name: "PerformanceData",
+    component: Login,
+  },
 ];

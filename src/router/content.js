@@ -35,6 +35,7 @@ const Content = (props) => {
               />
             );
           })}
+          <Route path="*">{<div>404</div>}</Route>
         </Switch>
       </Suspense>
     </div>
