@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { ReactComponent as Logo } from "~/assets/logo.svg";
 import { Avatar } from "antd";
-import styles from "./aside.module.less";
+import styles from "./index.module.less";
 import asideMap from "./aside_map";
 // iconfont
 const Icons = createFromIconfontCN({
@@ -87,8 +87,9 @@ const RootTreeItem = ({ item, setAsidePath, asidePath }) => {
 const mapStateToProps = function (state) {
   return state;
 };
-const RootTree = connect(mapStateToProps)(
-  withRouter((props) => {
+// withRouter 在 connect 的外部，防止路由更新，组件未重新渲染
+const RootTree = withRouter(
+  connect(mapStateToProps)((props) => {
     const { commonReducer: asidePath, dispatch } = props;
 
     const { pathname } = useLocation();
@@ -115,7 +116,7 @@ const RootTree = connect(mapStateToProps)(
   })
 );
 
-const TreeBottom = (props) => {
+const TreeBottom = () => {
   const [show, setShow] = useState(false);
   return (
     <div className={styles.tree_bottom}>
